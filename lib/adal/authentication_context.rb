@@ -187,7 +187,7 @@ module ADAL
     # @return URI
     def authorization_request_url_v2(
       scope, client_id, redirect_uri, extra_query_params = {})
-      @authority.authorize_endpoint(
+      @authority.authorize_v2_endpoint(
         extra_query_params.reverse_merge(
           client_id: client_id,
           response_mode: FORM_POST,
