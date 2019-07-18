@@ -33,6 +33,7 @@ module ADAL
     include Logging
 
     AUTHORIZE_PATH = '/oauth2/authorize'
+    AUTHORIZE_V2_PATH = '/oauth2/v2.0/authorize'
     COMMON_TENANT = 'common'
     DISCOVERY_TEMPLATE = URITemplate.new('https://{host}/common/discovery/' \
       'instance?authorization_endpoint={endpoint}&api-version=1.0')
@@ -83,6 +84,23 @@ module ADAL
       else
         URI::HTTPS.build(host: @host,
                          path: '/' + @tenant + AUTHORIZE_PATH,
+                         query: URI.encode_www_form(params))
+      end
+    end
+
+    ##
+    # URI that can be used to acquire authorization codes.
+    #
+    # @optional Hash params
+    #   Query parameters that will added to the endpoint.
+    # @return [URI]
+    def authorize_v2_endpoint(params = nil)
+      params = params.select { |_, v| !v.nil? } if params.respond_to? :select
+      if params.nil? || params.empty?
+        URI::HTTPS.build(host: @host, path: '/' + @tenant + AUTHORIZE_PATH)
+      else
+        URI::HTTPS.build(host: @host,
+                         path: '/' + @tenant + AUTHORIZE_V2_PATH,
                          query: URI.encode_www_form(params))
       end
     end
