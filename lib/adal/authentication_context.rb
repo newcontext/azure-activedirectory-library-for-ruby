@@ -174,6 +174,29 @@ module ADAL
     end
 
     ##
+    # Constructs a URL for an authorization endpoint using query parameters.
+    #
+    # @param String scope
+    #   The scope you need access to.
+    # @param String client_id
+    #   The identifier of the calling client application.
+    # @param URI redirect_uri
+    #   The URI that the the authorization code should be sent back to.
+    # @optional Hash extra_query_params
+    #   Any remaining query parameters to add to the URI.
+    # @return URI
+    def authorization_request_url_v2(
+      scope, client_id, redirect_uri, extra_query_params = {})
+      @authority.authorize_endpoint(
+        extra_query_params.reverse_merge(
+          client_id: client_id,
+          response_mode: FORM_POST,
+          redirect_uri: redirect_uri,
+          scope: scope,
+          response_type: CODE))
+    end
+
+    ##
     # Sets the correlation id that will be used in all future request headers
     # and logs.
     #
